@@ -210,6 +210,7 @@
         tableConfig       : '=',
         tableData         : '=',
         tableName         : '@?',
+        onSort            : '=?',
         currentPage       : '=?'
       },
 
@@ -307,8 +308,12 @@
         if ( ( column.columnClick === 'sort' || !column.columnClick ) && self.sortField.name === column.key ) {
           self.sortField.reverse = !self.sortField.reverse;
         }
-
         self.sortField.name = column.key;
+
+        if ( _.isFunction( self.onSort )) {
+          self.onSort( self.sortField );
+        }
+
         applyFilter();
       };
 
