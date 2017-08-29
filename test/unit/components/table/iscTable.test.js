@@ -307,7 +307,11 @@
           '           table-data="tableData"' +
           '           back-button-callback="backButtonCallback()"' +
           '           row-button-callback="rowButtonCallback( state )">' +
-          '</isc-table>';
+          '</isc-table>' +
+          '<hspc-health-records-details details-config="detailsConfig"' +
+          'details-data="detailsdata"' +
+          'back-button-callback="backButtonCallback()">' +
+          '</hspc-health-records-details>';
 
         compileDirective();
       } );
@@ -330,6 +334,24 @@
         isolateScope.iscTblCtrl.sortColumn( tableConfig.columns[1] );
         expect( isolateScope.iscTblCtrl.sortField ).toEqual( { reverse: true, name: 'Timestamp' } );
       } );
+
+      it( "should maintain user entered sorts after navigating to details and back", function() {
+        isolateScope.iscTblCtrl.sortColumn( tableConfig.columns[1] );
+        isolateScope.iscTblCtrl.sortColumn( tableConfig.columns[1] );
+        expect( isolateScope.iscTblCtrl.sortField ).toEqual( { reverse: true, name: 'Timestamp' } );
+        isolateScope.iscTblCtrl.rowButtonCallback( { state: 'test' } );
+        isolateScope.iscTblCtrl.backButtonCallback();
+        expect( isolateScope.iscTblCtrl.sortField ).toEqual( { reverse: true, name: 'Timestamp' } );
+      });
+
+      it( "should maintain user entered sorts after navigating to details and back 2", function() {
+        isolateScope.iscTblCtrl.sortColumn( tableConfig.columns[0] );
+        isolateScope.iscTblCtrl.sortColumn( tableConfig.columns[0] );
+        expect( isolateScope.iscTblCtrl.sortField ).toEqual( { reverse: true, name: 'OrderedItemDisplay' } );
+        isolateScope.iscTblCtrl.rowButtonCallback( { state: 'test' } );
+        isolateScope.iscTblCtrl.backButtonCallback();
+        expect( isolateScope.iscTblCtrl.sortField ).toEqual( { reverse: true, name: 'OrderedItemDisplay' } );
+      });
 
     } );
 
