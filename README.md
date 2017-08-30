@@ -484,7 +484,7 @@ gulp deploy --appjson path/to/config.app.js #only app specific
 * **How do I contribute to i18n extraction patterns?**
   * You'll need to create RegExp for matching and capturing the translation literals and ask a UIFW developer to add it to UIFW for you.
 
-* **How do I override 404 status-code traffic so I can stay on my page instead of get redirected to login?
+* **How do I override 404 status-code traffic so I can stay on my page instead of get redirected to login?**
   * In order to control 404 status-code inside your application, the framework exposes interface to allow the application inject an array of REGEX that will capture the url to ignore by the interceptor.
     To add items to the application follow these steps:
     1. Open the "app.module.js" file and go to the "run()" function.
@@ -532,8 +532,8 @@ gulp deploy --appjson path/to/config.app.js #only app specific
 * **How do I format my JavaScript code to meet the coding guideline?**
   * execute ```gulp jsformat``` in the git project folder
 
-* **I am running “Deploy” operation and my client fails with a message such as “eProvider” not found
-  *This issue is typical to a client script that was “minified” and “uglified”. During the deploy process when we minify and uglify the scripts,
+* **I am running the "deploy" operation and my client fails with a message such as "eProvider" not found**
+  * This issue is typical to a client script that was “minified” and “uglified”. During the deploy process when we minify and uglify the scripts,
    all the function’s arguments names are changed to a single letter.
    If you had an injection of “$scope” for example, after minification, it will change to a single letter like “e”.
 
@@ -546,8 +546,8 @@ gulp deploy --appjson path/to/config.app.js #only app specific
 
    State definition with “resolve”:
    ===============================
-   When you define “states” for the ui-route module, you have the option to define “resolves” functions.
-   These function also allow to inject “angular” injectable.
+   When you define “states” for the ui-route module, you have the option to define “resolve” functions.
+   These functions also allow you to inject an “angular” injectable.
    You will have to place
    ```javascript
    /* @ngInject */
@@ -566,7 +566,7 @@ gulp deploy --appjson path/to/config.app.js #only app specific
    ```
 
 ---
-###Git 101
+### Git 101
 ```bash
 # To switch between existing local branches
 git checkout <branch>
@@ -648,7 +648,7 @@ git config --global alias.last 'log -1 --oneline HEAD'
 ```
 
 ---
-###Mac Terminal shortcuts (OS X only)
+### Mac Terminal shortcuts (OS X only)
 ```bash
 
 # delete the word immediately before, or to the left of, the cursor
@@ -680,7 +680,7 @@ Escape + b
 
 ```
 
-###Bash 101 (OS X only)
+### Bash 101 (OS X only)
 ```bash
 # go to home (same as cd ~)
 cd
