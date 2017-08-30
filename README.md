@@ -45,8 +45,6 @@ Online training videos are internally network-shared here: [//iscinternal.com/is
     # create a new project and push it to the destination GitHub Repo
     slush isc:createRepo
 ```
-
-```    
 ### For app developers (clone project)
 ```bash
     #clone existin GitHub project
@@ -54,7 +52,7 @@ Online training videos are internally network-shared here: [//iscinternal.com/is
 ```
 
 ---
-##Run application
+## Run application
 *note:* app specific commands requires app code
 
 ```bash
@@ -94,8 +92,8 @@ gulp build --appjson path/to/config.app.js #only app specific
 gulp deploy --appjson path/to/config.app.js #only app specific
 ```
 ---
-###File structure
-
+### File structure
+```
     |-- gulpfile.js //utilizes gulp tasks inside of ./gulp/ folder
     |-- gulp
     |   |__ config.app.js   // this file imports settings from config.common and config.components
@@ -128,7 +126,7 @@ gulp deploy --appjson path/to/config.app.js #only app specific
     |   |   |-- common
     |   |   |-- components
     |___|___|__ app     //application specific
-
+```
 
 ---
 ###gulp configs
@@ -261,7 +259,7 @@ gulp deploy --appjson path/to/config.app.js #only app specific
 ```
 
 ---
-###FAQs
+### FAQs
 * **I am getting this error message ```slush: command not found```**
   * Make sure your environment satisfies all of the [prerequisites](#prerequisites) and [uifw-tools] is installed
 
@@ -436,8 +434,8 @@ gulp deploy --appjson path/to/config.app.js #only app specific
     but in the app.config.js file, omit the leading slash, e.g.
      ```"public/api/v1"```
 
-* **How do I flag string literals to be translated?**
-  * The translation keys are extracted via ```gulp i18nExtract``` task. It will extract keys matching these following patterns:
+#### * **How do I flag string literals to be translated?**
+  * The translation keys are extracted via the ```gulp i18nExtract``` task. It will extract keys matching these following patterns:
   ```
   // HTML
   {{ "my literal" | translate }}
