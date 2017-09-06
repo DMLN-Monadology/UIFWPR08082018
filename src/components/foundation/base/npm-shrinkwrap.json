@@ -12,10 +12,10 @@
       "from": "angular-formly@8.3.0",
       "resolved": "https://registry.npmjs.org/angular-formly/-/angular-formly-8.3.0.tgz"
     },
-    "angular-moment-picker" : {
-      "version": "0.9.7",
-      "from": "angular-moment-picker@0.9.7",
-      "resolved": "https://registry.npmjs.org/angular-moment-picker/-/angular-moment-picker-0.9.7.tgz"
+    "angular-moment-picker": {
+      "version": "0.9.11",
+      "from": "angular-moment-picker@0.9.11",
+      "resolved": "https://registry.npmjs.org/angular-moment-picker/-/angular-moment-picker-0.9.11.tgz"
     },
     "angular-utils-pagination": {
       "version": "0.11.1",
