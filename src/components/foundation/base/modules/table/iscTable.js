@@ -310,7 +310,7 @@
         }
         self.sortField.name = column.key;
 
-        if ( _.isFunction( self.onSort )) {
+        if ( _.isFunction( self.onSort ) ) {
           self.onSort( self.sortField );
         }
 
