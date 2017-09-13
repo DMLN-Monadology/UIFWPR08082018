@@ -423,7 +423,9 @@
                     loadFormAsAsset   : loadFormAsAsset,
                     subformDefinitions: subforms,
                     library           : library,
-                    mode              : mode,
+                    // always fetch the primary "edit" mode on embedded forms;
+                    // it will be viewModeified after all promises are resolved
+                    // mode              : mode,
                     promiseCache      : promiseCache
                   } )
                     .then( function( embeddedForm ) {
