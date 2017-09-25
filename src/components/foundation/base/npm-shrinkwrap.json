@@ -33,9 +33,9 @@
       "resolved": "https://registry.npmjs.org/api-check/-/api-check-7.5.5.tgz"
     },
     "font-awesome": {
-      "version": "4.6.3",
-      "from": "font-awesome@4.6.3",
-      "resolved": "https://registry.npmjs.org/font-awesome/-/font-awesome-4.6.3.tgz"
+      "version": "4.7.0",
+      "from": "font-awesome@4.7.0",
+      "resolved": "https://registry.npmjs.org/font-awesome/-/font-awesome-4.7.0.tgz"
     },
     "foundation-apps": {
       "version": "1.2.0",
