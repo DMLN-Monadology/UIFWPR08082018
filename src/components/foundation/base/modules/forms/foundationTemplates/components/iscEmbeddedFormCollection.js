@@ -774,7 +774,13 @@
       function saveForm() {
         self.subformOptions.formState._validation.$submitted = true;
 
-        var isSubformValid = self.isPrimitive || iscFormsValidationService.validateForm( self.subform.form ).isValid;
+        var isSubformValid = self.isPrimitive,
+            validation     = null;
+
+        if ( !isSubformValid ) {
+          validation     = iscFormsValidationService.validateForm( self.subform.form );
+          isSubformValid = validation.isValid;
+        }
 
         // If this subform is valid, save the data and return
         if ( isSubformValid ) {
@@ -812,6 +818,12 @@
           hideSubform();
           $scope.$emit( FORMS_EVENTS.collectionEditSaved, {
             key      : self.options.key,
+            editModel: self.editModel
+          } );
+        }
+        else {
+          $scope.$emit( FORMS_EVENTS.collectionValidationError, {
+            error    : _.get( validation, '$error' ),
             editModel: self.editModel
           } );
         }
