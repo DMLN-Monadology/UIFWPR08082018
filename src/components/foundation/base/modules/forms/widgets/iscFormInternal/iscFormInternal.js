@@ -86,7 +86,6 @@
         // Object to hold data and structure for temporary form validation
         self.validation = iscFormsValidationService.getValidationObject();
 
-        iscNotificationService.init();
         initAutosaveConfig();
         watchSections();
 
@@ -381,6 +380,10 @@
           if ( containingFormIsValid ) {
             $scope.$emit( FORMS_EVENTS.formValidationSuccess );
             submitForm();
+          }
+          else {
+            $scope.$emit( FORMS_EVENTS.formValidationError );
+            showFailedValidation( $error );
           }
         }
       }
