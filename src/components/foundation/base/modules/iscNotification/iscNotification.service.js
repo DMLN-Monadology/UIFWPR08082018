@@ -24,10 +24,10 @@
         showDark    = _.partial( show, NOTIFICATION.type.dark );
 
     return {
-      init              : init,
-      setDefaults       : setDefaults,
-      registerFieldScope: registerFieldScope,
-      getFieldScope     : getFieldScope,
+      setDefaults         : setDefaults,
+      registerFieldScope  : registerFieldScope,
+      deregisterFieldScope: deregisterFieldScope,
+      getFieldScope       : getFieldScope,
 
       showAlert         : showAlert,
       showWarning       : showWarning,
@@ -37,17 +37,18 @@
 
     /**
      * @memberOf iscNotificationService
+     * @param scope
      */
-    function init() {
-      fieldScope = {};
+    function registerFieldScope( scope ) {
+      fieldScope[scope.id] = scope;
     }
 
     /**
      * @memberOf iscNotificationService
      * @param scope
      */
-    function registerFieldScope( scope ) {
-      fieldScope[scope.id] = scope;
+    function deregisterFieldScope( scope ) {
+      delete fieldScope[scope.id];
     }
 
     /**

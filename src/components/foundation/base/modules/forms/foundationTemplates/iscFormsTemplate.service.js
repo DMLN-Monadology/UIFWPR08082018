@@ -418,6 +418,9 @@
         overwriteOk: true,
         controller : /* @ngInject */ function controller( $scope, iscNotificationService ) {
           iscNotificationService.registerFieldScope( $scope );
+          $scope.$on( '$destroy', function() {
+            iscNotificationService.deregisterFieldScope( $scope );
+          } );
 
           var formlyRootCtrl = getFormlyRoot( $scope );
 
