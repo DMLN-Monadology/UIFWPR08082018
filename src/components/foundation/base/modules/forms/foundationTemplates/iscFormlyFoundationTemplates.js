@@ -667,10 +667,11 @@
         },
         /* @ngInject */
         controller    : function( $scope ) {
-          var stateKey  = 'controlFlowOnly',
-              key       = $scope.options.key,
+          var key       = $scope.options.key,
               data      = _.get( $scope.options, 'data.controlFlowOnly', {} ),
-              stateInit = data.stateInit;
+              stateInit = data.stateInit,
+              formId    = _.get( $scope, 'form.$name', $scope.formId ),
+              stateKey  = data.useFormStateRoot ? 'controlFlowOnly' : ['controlFlowOnly', formId].join( '.' );
 
           // Eval the initial state based on the data property
           var initialValue = $scope.$eval( stateInit, $scope );

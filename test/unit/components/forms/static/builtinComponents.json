@@ -311,8 +311,9 @@
           },
           "data"            : {
             "controlFlowOnly" : {
-              "templateType" : "radio",
-              "stateInit"    : "!!model.templates.input.text ? 'opt 1' : 'opt 2'"
+              "templateType"     : "radio",
+              "useFormStateRoot" : true,
+              "stateInit"        : "!!model.templates.input.text ? 'opt 1' : 'opt 2'"
             }
           }
         }
