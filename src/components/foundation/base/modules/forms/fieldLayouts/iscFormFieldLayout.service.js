@@ -41,6 +41,9 @@
         // ---------------
         // Columns
 
+        // Tag any container with a layout specified with a selector
+        applyClassName( fieldContainer, 'has-data-layout' );
+
         applyClassName( fieldContainer, 'grid-block' );
 
         // If this column layout is a number, apply the layout by using the first -up breakpoint class.

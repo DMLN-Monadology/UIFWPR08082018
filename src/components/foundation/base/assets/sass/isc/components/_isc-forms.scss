@@ -178,6 +178,15 @@ $breakpoint-percentages : (
           margin-bottom: 0;
         }
       }
+      // Field groups with no data layout default to inline.
+      // This sets them to flex, for more consistent behavior vis-a-vis those that do have a layout.
+      > [is-field-group]:not(.has-data-layout) {
+        display   : flex;
+        flex-wrap : wrap;
+        > [formly-field] {
+          flex-basis : 100%;
+        }
+      }
     }
   }
 
