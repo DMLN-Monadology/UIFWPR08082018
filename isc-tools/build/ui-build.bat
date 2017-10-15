@@ -28,7 +28,7 @@ IF "%MODE%"=="debug" (
 )
 
 SET origdir=%CD%
-SET hsuidir=%1%
+SET hsuidir=%1
 SET hsprojectname=%2
 SET pythonprojectname=%~3
 SET hsdbname=%4
@@ -46,7 +46,11 @@ CD %hsuidir%
 SET hsuidir=%CD%
 SET popuishare=0
 SET baseuidir=%hsuidir%\..
-SET builtroot=%origdir%\..\..\built\%PLATFORM%\%MODE%
+SET devrootdir=%origdir%\..\..
+PUSHD %devrootdir%
+SET devrootdir=%CD%
+POPD
+SET builtroot=%devrootdir%\built\%PLATFORM%\%MODE%
 IF NOT EXIST %builtroot% (
 	MKDIR %builtroot%
 )
@@ -155,7 +159,7 @@ IF EXIST %npm_config_cache% (
 
 :: Build dependencies
 SET NODE_PATH=%nodedir%\node_modules
-SET PATH=%PATH%%CD%node_modules\.bin;
+SET PATH=%PATH%%CD%\node_modules\.bin;
 
 SET npmloglevel=warn
 IF "%MODE%"=="debug" (
@@ -171,6 +175,31 @@ IF "%MODE%"=="debug" (
 	CALL where python
 	CALL python --version
 	ECHO %PYTHON%
+)
+
+IF EXIST uifw-nightly-version.json (
+	DEL /Q uifw-nightly-version.json
+)
+
+:: Find out if we are in a nightly build; require all of the following:
+::  1. Check if hslib/inc/HSBuild.inc exists
+::  2. Check if %hsdbname%Build.inc exists
+::  3. Check if sh can be located using WHERE /Q
+SET hs_build_file=%devrootdir%\databases\hslib\inc\HSBuild.inc
+SET hs_db_build_file=%devrootdir%\databases\%hsdbname%\inc\%hsdbname%Build.inc
+IF EXIST %hs_build_file% (
+	IF EXIST %hs_db_build_file% (
+		WHERE /Q sh
+		IF NOT ERRORLEVEL 1 (
+			SET UIFW_NIGHTLY=1
+			CALL sh isc-tools\build\ui_version.sh %hsdbname% %hs_db_build_file% %hs_build_file% > uifw-nightly-version.json
+			IF ERRORLEVEL 1 (
+				ECHO ERROR in ui_version call
+				SET RETURNCODE=1
+				GOTO End
+			)
+		)
+	)
 )
 
 :: If isc-tools\npm-shrinkwrap-online.json is present, overwrite npm-shrinkwrap.json with that file
@@ -247,6 +276,7 @@ IF NOT "%uishare%" == "" (
 	NET SHARE %uishare% /DELETE /YES
 )
 
+SET UIFW_NIGHTLY=
 SET PATH=%oldpath%
 CD %origdir%
 
@@ -257,15 +287,10 @@ EXIT /B %RETURNCODE%
 
 :: Sub-routine to perform npm install in a target directory specified in argument 1
 :RunNpmInstall
-
 PUSHD %1
-
 ECHO Running 'npm install --loglevel %npmloglevel%' in directory '%CD%'
-
 CALL npm install --loglevel %npmloglevel% || EXIT /B 1
 :: Ensure that we turn ECHO on, just in case npm turned it off
 @ECHO ON
-
 POPD
-
 EXIT /B 0
