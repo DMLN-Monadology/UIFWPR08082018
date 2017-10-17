@@ -383,6 +383,15 @@
                 );
               },
               message   : '"A partial date must be: a year, a year and month, or a complete date."'
+            },
+            required   : {
+              expression: function( $viewValue, $modelValue, scope ) {
+                // Since we are adding a default required validator to all instances,
+                // it should only fail if "required" is set in the field definition.
+                return !_.get( scope, 'to.required' )
+                  // A partial date may be saved as an empty object
+                  || !_.isEmpty( $viewValue );
+              }
             }
           },
           data      : {

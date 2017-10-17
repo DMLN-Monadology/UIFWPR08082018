@@ -152,7 +152,7 @@
           if ( newVal !== oldVal ) {
             var date = scope.date;
 
-            if ( allowPartialDates ) {
+            if ( allowPartialDates && (date.day || date.month || date.year) ) {
               setNgModel( date );
               return;
             }
