@@ -28,6 +28,7 @@
         'src/app/modules/**/*.js'                    : ['coverage'],
         'src/common/modules/**/*.html'               : ['ng-html2js'],
         'src/components/**/modules/**/*.html'        : ['ng-html2js'],
+        'src/uifw-modules/src/app/modules/**/*.html' : ['ng-html2js'],
         'src/app/modules/**/*.html'                  : ['ng-html2js'],
         'test/unit/components/forms/static/**/*.html': ['ng-html2js'],
         'test/unit/components/forms/static/**/*.css' : ['ng-html2js'],
@@ -36,7 +37,7 @@
       },
 
       ngHtml2JsPreprocessor   : {
-        stripPrefix: 'src\/(app|common|components)\/.*\/?modules\/',
+        stripPrefix: 'src\/(app|common|components|uifw-modules\/src\/app)\/.*\/?modules\/',
         moduleName : 'isc.templates' // include beforeEach( module( 'isc.templates' )) in unit tests
       },
       jsonFixturesPreprocessor: {

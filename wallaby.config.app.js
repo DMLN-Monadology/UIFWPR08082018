@@ -52,6 +52,12 @@ function wallaby() {
           stripPrefix : 'src\/(app|common|components)\/.*\/?modules\/',
           'moduleName': 'isc.templates'
         } );
+      },
+      'src/uifw-modules/src/app/modules/**/*.html': function( file ) {
+        return angularTemplatePreprocessor.transform( file, {
+          stripPrefix : 'src\/uifw-modules\/src\/app\/.*\/?modules\/',
+          'moduleName': 'isc.templates'
+        } );
       }
     },
     'testFramework': 'jasmine'
