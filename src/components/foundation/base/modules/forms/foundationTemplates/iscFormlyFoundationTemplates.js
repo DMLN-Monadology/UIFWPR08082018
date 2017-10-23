@@ -171,7 +171,7 @@
           if ( type === 'email' ) {
             var emailValidator = {
               expression: function( $viewValue ) {
-                return emailRegExp.test( $viewValue );
+                return _.isNil( $viewValue ) || $viewValue === '' || emailRegExp.test( $viewValue );
               }
             };
             // Provide a custom validator for the built-in validation type of 'email'.
