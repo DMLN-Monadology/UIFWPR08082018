@@ -39,7 +39,7 @@ function init( gulp, plugins, config, _, util ) {
           throw "No UIFW Nightly Version Data";
         }
         var uifwVersionWrapper = JSON.parse( data );
-        var uifwVersion = ( uifwVersionWrapper && uifwVersionWrapper['uifw-nightly-version'] ) ? uifwVersionWrapper['uifw-nightly-version'] : null;
+        var uifwVersion = _.get( uifwVersionWrapper, 'uifw-nightly-version' );
         if ( !uifwVersion || ( typeof uifwVersion != 'object' ) ) {
           throw 'Invalid UIFW Nightly Version';
         }
