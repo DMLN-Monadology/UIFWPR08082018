@@ -1,6 +1,6 @@
 {
   "app" : {
-    "releaseno": "internal",
+    "releaseno": "{{releaseno}}",
     "buildno"  : "{{appBuildno}}",
     "codeno"   : "{{appCodeno}}"
   },
