@@ -8,12 +8,11 @@
   /**
    * @ngdoc factory
    * @memberOf isc.core
-   * @param iscHttpapi
+   * @param $q
+   * @param iscCustomConfigService
    * @returns {{load: load, get: get}}
    */
-  function iscVersionApi( iscHttpapi ) {
-    var _url = 'version.json';
-
+  function iscVersionApi( $q, iscCustomConfigService ) {
     var _versionInfo;
 
     return {
@@ -22,28 +21,23 @@
     };
 
     /**
-     * Loads the version.json file and caches it.
+     * Loads the version information from the runtime config and caches it.
      * @returns {Promise}
      */
     function load() {
-      return iscHttpapi.get( _url ).then( onSuccess, onError );
+      var config = iscCustomConfigService.getConfig();
 
-      function onSuccess( version ) {
+      // Wrapped in a $q promise for backwards compatibility with previous API
+      return $q.when( _.get( config, 'appVersion', {} ) ).then( cacheVersion );
+
+      function cacheVersion( version ) {
         _versionInfo = version;
-        return _versionInfo;
-      }
-
-      function onError() {
-        _versionInfo = {
-          app : {},
-          core: {}
-        };
         return _versionInfo;
       }
     }
 
     /**
-     * Returns the current build info as an object.
+     * Returns the current version info as an object.
      * @returns {Object}
      */
     function get() {

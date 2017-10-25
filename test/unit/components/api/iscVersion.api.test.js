@@ -4,87 +4,47 @@
   describe( 'iscVersionApi', function() {
     var suite;
 
-    var mockVersionFile = {
-      app : {
-        "releaseno": "internal",
-        "buildno"  : "2016.0701",
-        "codeno"   : "abc678-branch"
-      },
-      core: {
-        "releaseno": "internal",
-        "buildno"  : "2016.0701",
-        "codeno"   : "abc678-core"
-      }
+    var mockVersionInfo = {
+      release: 'internal',
+      build  : '2017-10-25',
+      change : '123'
     };
 
-    var errorVersionFile = {
-      app : {},
-      core: {}
-    };
+    useDefaultModules( 'isc.core' );
 
-    useDefaultModules( 'isc.core', 'isc.http' );
-
-    beforeEach( inject( function( $httpBackend,
-      iscVersionApi, iscHttpapi ) {
+    beforeEach( inject( function( $timeout, iscCustomConfigService, iscVersionApi ) {
       suite = window.createSuite( {
-        api         : iscVersionApi,
-        httpApi     : iscHttpapi,
-        $httpBackend: $httpBackend
+        iscVersionApi         : iscVersionApi,
+        iscCustomConfigService: iscCustomConfigService,
+        $timeout              : $timeout
       } );
     } ) );
 
 
     describe( 'iscVersionApi', function() {
       it( 'should have revealed functions', function() {
-        expect( _.isFunction( suite.api.load ) ).toBe( true );
-        expect( _.isFunction( suite.api.get ) ).toBe( true );
+        expect( _.isFunction( suite.iscVersionApi.load ) ).toBe( true );
+        expect( _.isFunction( suite.iscVersionApi.get ) ).toBe( true );
       } );
     } );
 
     describe( 'api.load and api.get', function() {
-      it( 'should load a the version file from the server', function() {
-        spyOn( suite.httpApi, 'get' ).and.callThrough();
-        spyOn( suite.api, 'load' ).and.callThrough();
-        spyOn( suite.api, 'get' ).and.callThrough();
+      it( 'should load the version info from the config', function() {
+        spyOn( suite.iscCustomConfigService, 'getConfig' ).and.returnValue( {
+          appVersion: mockVersionInfo
+        } );
 
-        mockBackend( suite.$httpBackend );
+        spyOn( suite.iscVersionApi, 'load' ).and.callThrough();
+        spyOn( suite.iscVersionApi, 'get' ).and.callThrough();
 
-        suite.api.load();
-        suite.$httpBackend.flush();
+        suite.iscVersionApi.load();
+        suite.$timeout.flush();
 
-        expect( suite.httpApi.get ).toHaveBeenCalled();
-
-        var version = suite.api.get();
-        expect( version ).toEqual( mockVersionFile );
-      } );
-
-      it( 'should load an empty version file on error', function() {
-        spyOn( suite.httpApi, 'get' ).and.callThrough();
-        spyOn( suite.api, 'load' ).and.callThrough();
-        spyOn( suite.api, 'get' ).and.callThrough();
-
-        mockBackend( suite.$httpBackend, true );
-
-        suite.api.load();
-        suite.$httpBackend.flush();
-
-        expect( suite.httpApi.get ).toHaveBeenCalled();
-
-        var version = suite.api.get();
-        expect( version ).toEqual( errorVersionFile );
+        var version = suite.iscVersionApi.get();
+        expect( version ).toEqual( mockVersionInfo );
       } );
     } );
 
-    function mockBackend( httpBackend, returnError ) {
-      if ( returnError ) {
-        httpBackend.when( 'GET', 'version.json' )
-          .respond( 404 );
-      }
-      else {
-        httpBackend.when( 'GET', 'version.json' )
-          .respond( 200, mockVersionFile );
-      }
-    }
   } );
 
 })();
