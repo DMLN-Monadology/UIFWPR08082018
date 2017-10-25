@@ -43,6 +43,12 @@
     return {
       //'customConfigUrl': 'path/to/external/config/api', //uncomment to call external api for custom config
       'production'          : false,
+      'appVersion'          : {
+        // updated via gulp at build time
+        'release' : '%appVersion.release%',
+        'build'   : '%appVersion.build%',
+        'change'  : '%appVersion.change%'
+      },
       'login'               : {
         "useCacheLogin": true,
         'requiresOrg'  : false
