@@ -75,8 +75,7 @@
         },
         function( value ) {
           if ( value === true ) {
-            self.ngModelCtrl.$setViewValue( null );
-            self.ngModelCtrl.$commitViewValue();
+            self.ngModel = null;
           }
         } );
     }
