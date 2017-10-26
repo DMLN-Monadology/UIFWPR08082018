@@ -52,6 +52,7 @@
 
         var input   = suite.element.find( 'input' ),
             form    = suite.element.find( 'form' ),
+            ngm     = suite.controller.ngModel,
             ngmCtrl = suite.controller.ngModelCtrl;
 
 
@@ -77,8 +78,8 @@
         input.val( '' );
         triggerUpdate();
 
-        expect( ngmCtrl.$viewValue ).toBe( null );
-        expect( ngmCtrl.$commitViewValue ).toHaveBeenCalled();
+        expect( ngmCtrl.$modelValue ).toBe( null );
+
         // Since we configured this to be ng-required, it should also be $invalid
         expect( ngmCtrl.$invalid ).toBe( true );
 
