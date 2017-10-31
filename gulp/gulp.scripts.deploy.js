@@ -16,6 +16,10 @@ function init( gulp, plugins, config, _, util ) {
 
 
   gulp.task('scripts:deploy', function () {
+    // Retrieves the version info set during gulp version
+    var release = _.get( config.app, 'appVersion.release' ),
+        build   = _.get( config.app, 'appVersion.build' ),
+        change  = _.get( config.app, 'appVersion.change' );
 
     var configPaths = ["vendor.js",
       "module.assets.vendor.js",
@@ -41,12 +45,16 @@ function init( gulp, plugins, config, _, util ) {
         return "!"+testGlob;
       })).compact().value();
 
-    return gulp.src(jsSrc)
-      // .pipe(plugins.filelog())
-      .pipe(plugins.ngAnnotate())
-      .pipe(plugins.concat('app.min.js'))
-      .pipe(plugins.uglify())
-      .pipe(gulp.dest(plugins.path.join(config.app.dest.folder, 'js')));
+    return gulp.src( jsSrc )
+      // .pipe( plugins.filelog() )
+      .pipe( plugins.ngAnnotate() )
+      .pipe( plugins.concat( 'app.min.js' ) )
+      // sets the version in the runtime config from the build config
+      .pipe( plugins.replace( '%appVersion.release%', release ) )
+      .pipe( plugins.replace( '%appVersion.build%', build ) )
+      .pipe( plugins.replace( '%appVersion.change%', change ) )
+      .pipe( plugins.uglify() )
+      .pipe( gulp.dest( plugins.path.join( config.app.dest.folder, 'js' ) ) );
 
   });
 

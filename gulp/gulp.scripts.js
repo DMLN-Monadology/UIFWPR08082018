@@ -68,26 +68,35 @@ function init( gulp, plugins, config, _, util ) {
   });
 
   gulp.task('scripts:app', function () {
-    var src = [];
-    if (configOverride) {
-      src.push(configOverride);
-      src.push(config.app.excludeConfig);
-    }
-    src = _.concat(src, config.app.module.modules, config.app.module.js, _.map(config.app.module.tests, function(testGlob){
-      return "!"+testGlob;
-    }));
+    // Retrieves the version info set during gulp version
+    var release = _.get( config.app, 'appVersion.release' ),
+        build   = _.get( config.app, 'appVersion.build' ),
+        change  = _.get( config.app, 'appVersion.change' );
 
-    return gulp.src(src)
-      .pipe(util.getPlumber())
-      // .pipe(plugins.filelog())
-      .pipe(plugins.sourcemaps.init())
-      .pipe(plugins.ngAnnotate())
-      .pipe(plugins.concat('7.app.min.js', { newLine: ';' }))
-      // .pipe(plugins.bytediff.start())
-      // .pipe(plugins.uglify())
-      // .pipe(plugins.bytediff.stop())
-      .pipe(plugins.sourcemaps.write('./'))
-      .pipe(gulp.dest(plugins.path.join(config.app.dest.folder, 'js')));
+    var src = [];
+    if ( configOverride ) {
+      src.push( configOverride );
+      src.push( config.app.excludeConfig );
+    }
+    src = _.concat( src, config.app.module.modules, config.app.module.js, _.map( config.app.module.tests, function( testGlob ) {
+      return "!" + testGlob;
+    } ) );
+
+    return gulp.src( src )
+      .pipe( util.getPlumber() )
+      // .pipe( plugins.filelog() )
+      .pipe( plugins.sourcemaps.init() )
+      .pipe( plugins.ngAnnotate() )
+      .pipe( plugins.concat( '7.app.min.js', { newLine: ';' } ) )
+      // sets the version in the runtime config from the build config
+      .pipe( plugins.replace( '%appVersion.release%', release ) )
+      .pipe( plugins.replace( '%appVersion.build%', build ) )
+      .pipe( plugins.replace( '%appVersion.change%', change ) )
+      // .pipe( plugins.bytediff.start() )
+      // .pipe( plugins.uglify() )
+      // .pipe( plugins.bytediff.stop() )
+      .pipe( plugins.sourcemaps.write( './' ) )
+      .pipe( gulp.dest( plugins.path.join( config.app.dest.folder, 'js' ) ) );
   });
 
   return gulp.task( 'scripts', ["scripts:vendor", "scripts:common", "scripts:components", "scripts:app"] );
