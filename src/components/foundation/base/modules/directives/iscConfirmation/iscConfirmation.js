@@ -18,7 +18,8 @@
    * @restrict 'E'
    * @returns {{restrict: string, link: link, controller: controller, controllerAs: string, templateUrl: directive.templateUrl}}
    */
-  function iscConfirmation() {//jshint ignore:line
+  /* @ngInject */
+  function iscConfirmation( FoundationApi ) {//jshint ignore:line
 
     // ----------------------------
     // vars
@@ -43,13 +44,13 @@
     // ----------------------------
     // link
     function link( $scope, elem, attrs, iscConfirmCtrl ) {
-      var modalScope = elem.find( '[zf-modal]' ).scope();
       $scope.$watch( 'iscConfirmCtrl.service.isOpen', function( newVal, oldVal ) {
         if ( newVal !== oldVal ) {
           if ( newVal === true ) {
-            modalScope.show();
-          } else {
-            modalScope.hide();
+            FoundationApi.publish( 'iscConfirmationModal', 'show' );
+          }
+          else {
+            FoundationApi.publish( 'iscConfirmationModal', 'hide' );
           }
         }
       } );
