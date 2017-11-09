@@ -32,11 +32,25 @@
     /**
      * @memberOf iscForm
      */
-    function controller() {
+    /* @ngInject */
+    function controller( $scope ) {
       var self = this;
 
       var defaultFormConfig   = iscFormsTemplateService.getFormDefaults();
       self.internalFormConfig = _.defaultsDeep( self.formConfig || {}, defaultFormConfig );
+
+      // If using a form data model specified with the model param, watching that param and updating the
+      // internal model permits updating the form's model directly. This effectively creates a one-way binding
+      // from the external model to the form's internal model.
+      // This is counter to the transactional paradigm of the form data model, so must be explicitly
+      // enabled through a config option.
+      if ( self.internalFormConfig.allowExternalModelUpdates && self.model ) {
+        var unwatch = $scope.$watch( self.model, function() {
+          self.internalModel = self.model;
+        }, true );
+
+        $scope.$on( '$destroy', unwatch );
+      }
 
       // Ensure id is either numeric or undefined (if passed directly from a route param, it could be a string)
       var parsedId          = parseInt( self.formDataId );

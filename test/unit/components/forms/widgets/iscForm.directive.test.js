@@ -30,7 +30,7 @@
     };
 
     var goodFormConfig = {
-      additionalModelInit: function( additionalModels, stateParams, formModel ) {
+      additionalModelInit      : function( additionalModels, stateParams, formModel ) {
         additionalModels.configuredModel = {
           "foo": "bar"
         };
@@ -90,6 +90,18 @@
           },
           text     : 'Test button',
           className: 'test-button'
+        }
+      }
+    };
+
+    var localModel = {
+      form : {
+        components : {
+          templates : {
+            input : {
+              text : 'initial value'
+            }
+          }
         }
       }
     };
@@ -622,6 +634,79 @@
 
         expect( _.isArray( model.RequiredSubform ) ).toBe( true );
         expect( model.RequiredSubform.length ).toEqual( 1 );
+      } );
+    } );
+
+    describe( 'suiteConfigured, local model', function() {
+      describe( 'allowExternalModelUpdates: true', function() {
+        beforeEach( function() {
+          suiteConfigured = createDirective( getConfiguredForm(), {
+            localFormConfig  : _.extend( {}, goodFormConfig, {
+              allowExternalModelUpdates: true
+            } ),
+            localButtonConfig: goodButtonConfig,
+            localModel       : localModel
+          } );
+          suiteMain.$httpBackend.flush();
+        } );
+
+        it( 'should update the form model when modified externally', function() {
+          var suite = suiteConfigured,
+              model = suite.controller.internalModel,
+              input;
+
+          getInput();
+          expect( input.length ).toBe( 1 );
+          expect( input.val() ).toEqual( 'initial value' );
+          expect( suite.$scope.localModel.form.components.templates.input.text ).toEqual( 'initial value' );
+          expect( model.form.components.templates.input.text ).toEqual( 'initial value' );
+
+          suite.$scope.localModel.form.components.templates.input.text = 'new value';
+          digest( suite );
+
+          getInput();
+          expect( model.form.components.templates.input.text ).toEqual( 'new value' );
+          expect( input.val() ).toEqual( 'new value' );
+
+          function getInput() {
+            input = getControlByName( suite, 'templates.input.text' );
+          }
+        } );
+      } );
+
+      describe( 'allowExternalModelUpdates: false', function() {
+        beforeEach( function() {
+          suiteConfigured = createDirective( getConfiguredForm(), {
+            localFormConfig  : goodFormConfig,
+            localButtonConfig: goodButtonConfig,
+            localModel       : localModel
+          } );
+          suiteMain.$httpBackend.flush();
+        } );
+
+        it( 'should not update the form model when modified externally', function() {
+          var suite = suiteConfigured,
+              model = suite.controller.internalModel,
+              input;
+
+          getInput();
+          expect( input.length ).toBe( 1 );
+          expect( input.val() ).toEqual( 'initial value' );
+          expect( suite.$scope.localModel.form.components.templates.input.text ).toEqual( 'initial value' );
+          expect( model.form.components.templates.input.text ).toEqual( 'initial value' );
+
+          suite.$scope.localModel.form.components.templates.input.text = 'new value';
+          digest( suite );
+
+          getInput();
+          expect( model.form.components.templates.input.text ).toEqual( 'initial value' );
+          expect( input.val() ).toEqual( 'initial value' );
+
+          function getInput() {
+            input = getControlByName( suite, 'templates.input.text' );
+          }
+        } );
+
       } );
     } );
 
