@@ -24,7 +24,7 @@
       var searchInput  = element.find( 'input.ui-select-search' ),
           displayField = attrs.displayField,
           ngBlur       = attrs.ngBlur,
-          isMultiple   = attrs.multiple !== undefined;
+          isMultiple   = !_.isUndefined( attrs.multiple );
 
       // Initializes the search input from the selected value for consistent behavior
       $timeout( setSearchFromSelected, 250 );
