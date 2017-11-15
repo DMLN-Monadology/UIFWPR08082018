@@ -23,7 +23,8 @@
 
       var searchInput  = element.find( 'input.ui-select-search' ),
           displayField = attrs.displayField,
-          ngBlur       = attrs.ngBlur;
+          ngBlur       = attrs.ngBlur,
+          isMultiple   = attrs.multiple !== undefined;
 
       // Initializes the search input from the selected value for consistent behavior
       $timeout( setSearchFromSelected, 250 );
@@ -134,8 +135,12 @@
       // Sets the ui-select's search input element's value to the control's selected value,
       // taking into account any displayField property for object-based data models.
       function setSearchFromSelected() {
-        var selected   = displayField ? _.get( $select.selected, displayField ) : $select.selected;
-        $select.search = selected || ''; // needs to be an empty string, not undefined or null
+        // We should only do this for ui-selects in single-select mode, since multiple-select mode
+        // already displays the selected values in the typeahead itself.
+        if ( !isMultiple ) {
+          var selected   = displayField ? _.get( $select.selected, displayField ) : $select.selected;
+          $select.search = selected || ''; // needs to be an empty string, not undefined or null
+        }
       }
     }
   }
