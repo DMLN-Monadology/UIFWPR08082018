@@ -24,9 +24,29 @@
           },
           "fieldGroup" : [
             {
-              "type"            : "input",
+              "type"            : "embeddedFormCollection",
               "templateOptions" : {
                 "label" : "Field"
+              },
+              "data"            : {
+                "embeddedFields" : [
+                  {
+                    "className"  : "testing-embedded-fields",
+                    "data"       : {
+                      "layout" : {
+                        "columns" : 4
+                      }
+                    },
+                    "fieldGroup" : [
+                      {
+                        "type"            : "input",
+                        "templateOptions" : {
+                          "label" : "Field"
+                        }
+                      }
+                    ]
+                  }
+                ]
               }
             }
           ]
@@ -64,9 +84,33 @@
           },
           "fieldGroup" : [
             {
-              "type"            : "input",
+              "type"            : "embeddedFormCollection",
               "templateOptions" : {
                 "label" : "Field"
+              },
+              "data"            : {
+                "embeddedFields" : [
+                  {
+                    "className"  : "testing-embedded-fields",
+                    "data"       : {
+                      "layout" : {
+                        "columns" : {
+                          "small"  : 7,
+                          "medium" : 8,
+                          "large"  : 9
+                        }
+                      }
+                    },
+                    "fieldGroup" : [
+                      {
+                        "type"            : "input",
+                        "templateOptions" : {
+                          "label" : "Field"
+                        }
+                      }
+                    ]
+                  }
+                ]
               }
             }
           ]
@@ -138,9 +182,50 @@
               }
             },
             {
-              "type"            : "input",
+              "type"            : "embeddedFormCollection",
               "templateOptions" : {
                 "label" : "Field"
+              },
+              "data"            : {
+                "embeddedFields" : [
+                  {
+                    "className"  : "testing-embedded-fields",
+                    "data"       : {
+                      "layout" : {
+                        "columns" : {
+                          "1" : "70%",
+                          "2" : "30%"
+                        }
+                      }
+                    },
+                    "fieldGroup" : [
+                      {
+                        "type"            : "input",
+                        "templateOptions" : {
+                          "label" : "Field"
+                        }
+                      },
+                      {
+                        "type"            : "input",
+                        "templateOptions" : {
+                          "label" : "Field"
+                        }
+                      },
+                      {
+                        "type"            : "input",
+                        "templateOptions" : {
+                          "label" : "Field"
+                        }
+                      },
+                      {
+                        "type"            : "input",
+                        "templateOptions" : {
+                          "label" : "Field"
+                        }
+                      }
+                    ]
+                  }
+                ]
               }
             }
           ]
@@ -228,9 +313,58 @@
               }
             },
             {
-              "type"            : "input",
+              "type"            : "embeddedFormCollection",
               "templateOptions" : {
                 "label" : "Field"
+              },
+              "data"            : {
+                "embeddedFields" : [
+                  {
+                    "className"  : "testing-embedded-fields",
+                    "data"       : {
+                      "layout" : {
+                        "columns" : {
+                          "small" : {
+                            "1" : "70%",
+                            "2" : "30%"
+                          },
+                          "large" : {
+                            "1" : "40%",
+                            "2" : "30%",
+                            "3" : "20%",
+                            "4" : "10%"
+                          }
+                        }
+                      }
+                    },
+                    "fieldGroup" : [
+                      {
+                        "type"            : "input",
+                        "templateOptions" : {
+                          "label" : "Field"
+                        }
+                      },
+                      {
+                        "type"            : "input",
+                        "templateOptions" : {
+                          "label" : "Field"
+                        }
+                      },
+                      {
+                        "type"            : "input",
+                        "templateOptions" : {
+                          "label" : "Field"
+                        }
+                      },
+                      {
+                        "type"            : "input",
+                        "templateOptions" : {
+                          "label" : "Field"
+                        }
+                      }
+                    ]
+                  }
+                ]
               }
             }
           ]

@@ -93,6 +93,14 @@
         _.forEach( childFields, function( field ) {
           transformContainer( field, true );
         } );
+
+        // Also apply transform to any inline-defined embedded forms
+        // These are indicated by having a "data.embeddedFields" property
+        _.forEach( _.filter( childFields, 'data.embeddedFields' ), function( efField ) {
+          _.forEach( efField.data.embeddedFields, function( field ) {
+            transformContainer( field, true );
+          } );
+        } );
       }
 
       function applyToFields( columns, breakpoint ) {
