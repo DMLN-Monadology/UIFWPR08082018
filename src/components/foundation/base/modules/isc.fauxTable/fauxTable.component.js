@@ -93,7 +93,7 @@
       log.logFn( '$onChanges' );
 
       pager             = _.get( changes, 'config.pager', {} );
-      self.paginationId = 'fauxTable_' + _.camelCase( self.config.title || '' );
+      self.paginationId = 'fauxTable_' + _.camelCase( _.get( self, 'config.title', '') );
       if ( pager.server && !pager.onPageChange ) {
         log.error( 'config.pager.onPageChange is required for server paging' );
       }

@@ -226,8 +226,10 @@
           } );
 
           $scope.multiCheckbox = {
-            checked: [],
-            change : setModel
+            checked        : [],
+            change         : setModel,
+            selectAll      : selectAll,
+            shouldSelectAll: shouldSelectAll
           };
 
           $scope.isHorizontal = _.get( opts, 'data.layout.orientation' ) === 'horizontal';
@@ -248,13 +250,29 @@
           }
 
           function setModel() {
+            //Data for select all is stored in last index
             var array = [];
             _.set( $scope.model, opts.key, array );
             angular.forEach( $scope.multiCheckbox.checked, function( checkbox, index ) {
-              if ( checkbox ) {
+              if ( checkbox && index < $scope.listOptions.length ) {
                 array.push( $scope.listOptions[index] );
               }
             } );
+          }
+          function selectAll() {
+            angular.forEach( $scope.listOptions, function( option, index ) {
+              $scope.multiCheckbox.checked[index] = $scope.multiCheckbox.checked[$scope.listOptions.length];
+            } );
+            setModel();
+          }
+          function shouldSelectAll() {
+            for ( var i = 0; i < $scope.listOptions.length; i++ ) {
+              if ( !$scope.multiCheckbox.checked[i] ) {
+                $scope.multiCheckbox.checked[$scope.listOptions.length] = false;
+                return false;
+              }
+            }
+            return true;
           }
         },
         link          : setQdTagManually
