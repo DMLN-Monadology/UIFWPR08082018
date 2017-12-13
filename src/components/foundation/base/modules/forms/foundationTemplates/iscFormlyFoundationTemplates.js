@@ -220,6 +220,7 @@
 
           var opts = $scope.options,
               data = opts.data;
+          var selectAllModel = false;
 
           angular.extend( $scope, {
             displayField: data.displayField
@@ -229,7 +230,8 @@
             checked        : [],
             change         : setModel,
             selectAll      : selectAll,
-            shouldSelectAll: shouldSelectAll
+            shouldSelectAll: shouldSelectAll,
+            selectAllModel : selectAllModel
           };
 
           $scope.isHorizontal = _.get( opts, 'data.layout.orientation' ) === 'horizontal';
@@ -250,25 +252,24 @@
           }
 
           function setModel() {
-            //Data for select all is stored in last index
             var array = [];
             _.set( $scope.model, opts.key, array );
             angular.forEach( $scope.multiCheckbox.checked, function( checkbox, index ) {
-              if ( checkbox && index < $scope.listOptions.length ) {
+              if ( checkbox ) {
                 array.push( $scope.listOptions[index] );
               }
             } );
           }
           function selectAll() {
             angular.forEach( $scope.listOptions, function( option, index ) {
-              $scope.multiCheckbox.checked[index] = $scope.multiCheckbox.checked[$scope.listOptions.length];
+              $scope.multiCheckbox.checked[index] = $scope.multiCheckbox.selectAllModel;
             } );
             setModel();
           }
           function shouldSelectAll() {
             for ( var i = 0; i < $scope.listOptions.length; i++ ) {
               if ( !$scope.multiCheckbox.checked[i] ) {
-                $scope.multiCheckbox.checked[$scope.listOptions.length] = false;
+                $scope.multiCheckbox.selectAllModel = false;
                 return false;
               }
             }
