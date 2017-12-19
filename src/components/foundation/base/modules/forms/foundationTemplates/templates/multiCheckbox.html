@@ -1,4 +1,19 @@
 <div class="check-list" ng-class="{ 'grid-block' : isHorizontal }">
+  <div class="checkbox"
+       ng-class="{ 'grid-block' : !isHorizontal, 'grid-content shrink' : isHorizontal }"
+       ng-if="options.templateOptions['selectAll']&&listOptions.length>2">
+    <label>
+      <input type="checkbox"
+             id="{{id + '_selectall'}}"
+             name="{{(name || id) + '_selectall'}}"
+             ng-disabled="to.disabled"
+             ng-model="multiCheckbox.selectAllModel"
+             ng-change="multiCheckbox.selectAll()"
+             ng-checked="multiCheckbox.shouldSelectAll()">
+      <strong>{{(options.templateOptions['selectAllDescription']||"Select All") | translate}}<strong>
+    </label>
+  </div>
+
   <div ng-repeat="(key, option) in listOptions"
        class="checkbox"
        ng-class="{ 'grid-block' : !isHorizontal, 'grid-content shrink' : isHorizontal }">
