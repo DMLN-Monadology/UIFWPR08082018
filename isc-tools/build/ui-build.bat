@@ -28,7 +28,7 @@ IF "%MODE%"=="debug" (
 )
 
 SET origdir=%CD%
-SET hsuidir=%1
+SET hsuidir=%1%
 SET hsprojectname=%2
 SET pythonprojectname=%~3
 SET hsdbname=%4
@@ -46,11 +46,7 @@ CD %hsuidir%
 SET hsuidir=%CD%
 SET popuishare=0
 SET baseuidir=%hsuidir%\..
-SET devrootdir=%origdir%\..\..
-PUSHD %devrootdir%
-SET devrootdir=%CD%
-POPD
-SET builtroot=%devrootdir%\built\%PLATFORM%\%MODE%
+SET builtroot=%origdir%\..\..\built\%PLATFORM%\%MODE%
 IF NOT EXIST %builtroot% (
 	MKDIR %builtroot%
 )
@@ -102,13 +98,13 @@ SET builtshare=hsui_built_%hsprojectname%_%tempsuffix%
 :: and this approach allows us to get a drive letter allocated without us being susceptible to timing problems
 :: if we try to find an unused drive letter and then use SUBST.
 IF EXIST %builtdir% (
-	NET SHARE %builtshare%=%builtroot% /GRANT:%USERDOMAIN%\%USERNAME%,FULL /USERS:1
+	NET SHARE %builtshare%=%builtroot% /GRANT:%USERNAME%,FULL /USERS:1
 	PUSHD \\localhost\%builtshare%
 	IF EXIST %hsprojectname% (
 		RMDIR /S /Q %hsprojectname%
 	)
 	POPD
-	NET SHARE %builtshare% /DELETE /YES
+	NET share %builtshare% /DELETE /YES
 	RMDIR /S /Q %builtdir%
 )
 :: Copy all files to built\projectname and make writable
@@ -118,7 +114,7 @@ SET uishare=hsui_%hsprojectname%_%tempsuffix%
 
 :: Use NET SHARE to allocate temp drive letters
 :: For the actual source code
-NET SHARE %uishare%=%builtdir% /GRANT:%USERDOMAIN%\%USERNAME%,FULL /USERS:1
+NET SHARE %uishare%=%builtdir% /GRANT:%USERNAME%,FULL /USERS:1
 PUSHD \\localhost\%uishare%
 SET popuishare=1
 SET uisharedir=%CD%
@@ -128,13 +124,15 @@ SET nodedir=%uisharedir%\%builddepdir%\node-%nodeversion%-win-x86-exe
 SET PATH=%PATH%%nodedir%;
 
 :: Add npm bin directory to PATH
-SET npmdir=%uisharedir%\%builddepdir%\npm-%npmversion%
-IF EXIST %npmdir%\bin\npm.cmd (
-	COPY %npmdir%\bin\npm.cmd %nodedir%
-)
 
-:: Copy npm into node\node_modules\npm
-ROBOCOPY %npmdir% %nodedir%\node_modules\npm /S /NP %ROBOCOPYLOGGING%
+SET npmtarball=%uisharedir%\%builddepdir%\npm-%npmversion%.tar
+:: Copy unpack npm.tar into node\node_modules\npm
+SET NODE_PATH=%nodedir%\node_modules
+SET PATH=%PATH%%CD%\node_modules\.bin;
+CALL node %uisharedir%\%builddepdir%\unpack.js --source=%npmtarball% --target=%nodedir%\node_modules
+IF EXIST %nodedir%\node_modules\npm\bin\npm.cmd (
+	COPY %nodedir%\node_modules\npm\bin\npm.cmd %nodedir%
+)
 
 :: Remove any existing content in node_modules
 IF EXIST %uisharedir%\node_modules (
@@ -158,8 +156,6 @@ IF EXIST %npm_config_cache% (
 )
 
 :: Build dependencies
-SET NODE_PATH=%nodedir%\node_modules
-SET PATH=%PATH%%CD%\node_modules\.bin;
 
 SET npmloglevel=warn
 IF "%MODE%"=="debug" (
@@ -175,32 +171,10 @@ IF "%MODE%"=="debug" (
 	CALL where python
 	CALL python --version
 	ECHO %PYTHON%
+
 )
 
-IF EXIST uifw-nightly-version.json (
-	DEL /Q uifw-nightly-version.json
-)
 
-:: Find out if we are in a nightly build; require all of the following:
-::  1. Check if hslib/inc/HSBuild.inc exists
-::  2. Check if %hsdbname%Build.inc exists
-::  3. Check if sh can be located using WHERE /Q
-SET hs_build_file=%devrootdir%\databases\hslib\inc\HSBuild.inc
-SET hs_db_build_file=%devrootdir%\databases\%hsdbname%\inc\%hsdbname%Build.inc
-IF EXIST %hs_build_file% (
-	IF EXIST %hs_db_build_file% (
-		WHERE /Q sh
-		IF NOT ERRORLEVEL 1 (
-			SET UIFW_NIGHTLY=1
-			CALL sh isc-tools\build\ui_version.sh %hsdbname% %hs_db_build_file% %hs_build_file% > uifw-nightly-version.json
-			IF ERRORLEVEL 1 (
-				ECHO ERROR in ui_version call
-				SET RETURNCODE=1
-				GOTO End
-			)
-		)
-	)
-)
 
 :: If isc-tools\npm-shrinkwrap-online.json is present, overwrite npm-shrinkwrap.json with that file
 IF EXIST %uisharedir%\isc-tools\npm-shrinkwrap-online.json (
@@ -273,10 +247,9 @@ IF "%popuishare%"=="1" (
 	POPD
 )
 IF NOT "%uishare%" == "" (
-	NET SHARE %uishare% /DELETE /YES
+	NET share %uishare% /delete /yes
 )
 
-SET UIFW_NIGHTLY=
 SET PATH=%oldpath%
 CD %origdir%
 
