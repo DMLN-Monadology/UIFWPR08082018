@@ -128,13 +128,15 @@ SET nodedir=%uisharedir%\%builddepdir%\node-%nodeversion%-win-x86-exe
 SET PATH=%PATH%%nodedir%;
 
 :: Add npm bin directory to PATH
-SET npmdir=%uisharedir%\%builddepdir%\npm-%npmversion%
-IF EXIST %npmdir%\bin\npm.cmd (
-	COPY %npmdir%\bin\npm.cmd %nodedir%
-)
 
-:: Copy npm into node\node_modules\npm
-ROBOCOPY %npmdir% %nodedir%\node_modules\npm /S /NP %ROBOCOPYLOGGING%
+SET npmtarball=%uisharedir%\%builddepdir%\npm-%npmversion%.tar
+:: Copy unpack npm.tar into node\node_modules\npm
+SET NODE_PATH=%nodedir%\node_modules
+SET PATH=%PATH%%CD%\node_modules\.bin;
+CALL node %uisharedir%\%builddepdir%\unpack.js --source=%npmtarball% --target=%nodedir%\node_modules
+IF EXIST %nodedir%\node_modules\npm\bin\npm.cmd (
+	COPY %nodedir%\node_modules\npm\bin\npm.cmd %nodedir%
+)
 
 :: Remove any existing content in node_modules
 IF EXIST %uisharedir%\node_modules (
@@ -158,8 +160,6 @@ IF EXIST %npm_config_cache% (
 )
 
 :: Build dependencies
-SET NODE_PATH=%nodedir%\node_modules
-SET PATH=%PATH%%CD%\node_modules\.bin;
 
 SET npmloglevel=warn
 IF "%MODE%"=="debug" (
