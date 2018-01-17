@@ -627,8 +627,8 @@
 
     function defaultGetValue( value, fieldDefinition ) {
       if ( _.isObject( value ) ) {
-        if (moment.isMoment(value)) {
-          return $filter( 'iscDate' )( value, _.get( config, 'formats.date.shortDate', 'date' ) )
+        if ( moment.isMoment( value ) ) {
+          return $filter( 'iscDate' )( value, _.get( config, 'formats.date.shortDate', 'date' ) );
         }
         var displayField = _.get( fieldDefinition, 'data.displayField', 'name' );
         return value[displayField];
