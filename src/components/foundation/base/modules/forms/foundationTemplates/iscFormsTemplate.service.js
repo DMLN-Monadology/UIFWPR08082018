@@ -73,8 +73,9 @@
 
     // YYYY-MM-DDThh:mm:ss.xxxZ   or
     // YYYY-MM-DD hh:mm:ss.xxxxxx or
-    // YYYY-MM-DD hh:mm:ss
-    var isoRE = /^\d{4}[-\/]{1}\d{2}[-\/]{1}\d{2}[T ]{1}\d{2}:{1}\d{2}:{1}\d{2}(.{1}\d{3,}Z?)?$/;
+    // YYYY-MM-DD hh:mm:ss        or
+    // YYYY-MM-DD
+    var isoRE = /^\d{4}[-\/]{1}\d{2}[-\/]{1}\d{2}([T ]{1}\d{2}:{1}\d{2}:{1}\d{2}(.{1}\d{3,}Z?)?)?$/;
 
     var defaultViewConfig = {
       getValue   : defaultGetValue,
@@ -626,6 +627,9 @@
 
     function defaultGetValue( value, fieldDefinition ) {
       if ( _.isObject( value ) ) {
+        if (moment.isMoment(value)) {
+          return $filter( 'iscDate' )( value, _.get( config, 'formats.date.shortDate', 'date' ) )
+        }
         var displayField = _.get( fieldDefinition, 'data.displayField', 'name' );
         return value[displayField];
       }
