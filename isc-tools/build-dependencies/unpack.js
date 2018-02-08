@@ -1,11 +1,8 @@
 var tar    = require( '../build-dependencies/tar' );
 const argv = require( '../build-dependencies/minimist' )( process.argv.slice( 2 ) );
-console.log( 'In Unpack.js' );
-console.log( 'Source:',  argv.source);
-console.log( 'Target:',  argv.target);
+console.log( 'Start to Unpack' );
 
 try {
-  console.log( 'Start to unpack!' );
   tar.x(
     {
       file: argv.source,
@@ -13,10 +10,10 @@ try {
       sync: true
     }
   );
-  console.log( 'End unpack!' );
+  console.log( 'Unpack Success' );
   process.exit( 0 );
 }
 catch ( error ) {
-  console.log( 'Unpack fail, reason: ', error );
+  console.log( 'Unpack Fail, Reason: ', error );
   process.exit( 1 );
 }

@@ -129,14 +129,11 @@ SET PATH=%PATH%%nodedir%;
 
 :: Add npm bin directory to PATH
 
-ECHO *******************Before Unpack***********************
 SET npmtarball=%uisharedir%\%builddepdir%\npm-%npmversion%.tar
 :: Copy unpack npm.tar into node\node_modules\npm
 SET NODE_PATH=%nodedir%\node_modules
 SET PATH=%PATH%%CD%\node_modules\.bin;
 
-DIR isc-tools\build-dependencies
-DIR isc-tools\build-dependencies\node-6.5.0-win-x86-exe
 MKDIR isc-tools\build-dependencies\node-6.5.0-win-x86-exe\node_modules
 
 CALL node %uisharedir%\%builddepdir%\unpack.js --source=%npmtarball% --target=%nodedir%\node_modules
@@ -144,18 +141,11 @@ IF ERRORLEVEL 1 (
 	SET RETURNCODE=1
 	GOTO End
 )
-DIR isc-tools\build-dependencies\node-6.5.0-win-x86-exe\node_modules
-IF EXIST %nodedir%\node_modules\npm (
-    ECHO npm exists!
-    DIR isc-tools\build-dependencies\node-6.5.0-win-x86-exe\node_modules\npm
-)
 
 IF EXIST %nodedir%\node_modules\npm\bin\npm.cmd (
-    ECHO npm.cmd exists!
 	COPY %nodedir%\node_modules\npm\bin\npm.cmd %nodedir%
 )
 
-ECHO *******************After Unpack***********************
 :: Remove any existing content in node_modules
 IF EXIST %uisharedir%\node_modules (
 	RMDIR /S /Q %uisharedir%\node_modules
