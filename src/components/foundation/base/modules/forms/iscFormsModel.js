@@ -433,6 +433,7 @@
                       if ( embeddedForm ) {
                         var subform      = embeddedForm.form,
                             childForms   = embeddedForm.subforms,
+                            metadata     = embeddedForm.metadata,
                             listenerType = {
                               'type': 'embeddedFormListener'
                             };
@@ -461,7 +462,8 @@
                         } );
 
                         // Update the subforms list
-                        subforms[embeddedType] = subform;
+                        subforms[embeddedType]          = subform;
+                        subforms[embeddedType].metadata = metadata;
 
                         // For previously cached subforms, merge any subforms of
                         // that cached form into this form's subforms list
