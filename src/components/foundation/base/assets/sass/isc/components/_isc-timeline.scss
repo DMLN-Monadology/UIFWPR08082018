@@ -62,6 +62,14 @@ $timeline-circle-size: 2.5rem !default;
         button {
           color: $timeline-color;
         }
+        :after {
+            border-bottom: solid 3px $timeline-color;
+            content: " ";
+            position: absolute;
+            left: 0px;
+            right: 0px;
+            bottom: -8px;
+        }
       }
     }
 
