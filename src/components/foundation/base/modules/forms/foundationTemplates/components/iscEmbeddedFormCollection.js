@@ -425,7 +425,7 @@
             if ( type && !_.startsWith( type, 'embeddedForm' ) ) {
               var options = _.get( iscFormsTemplateService.getRegisteredType( field.type ), 'defaultOptions' );
               if ( options ) {
-                var originalField = _.cloneDeep(field)
+                var originalField = _.cloneDeep( field );
                 angular.merge( field, options, originalField );
               }
             }
